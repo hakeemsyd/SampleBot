@@ -20,6 +20,6 @@ server.post('/api/messages', connector.listen());
 //=========================================================
 
 bot.dialog('/', function (session) {
-	session.send("Hello There");
+	session.send("I need brains");
 });
 
