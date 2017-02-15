@@ -19,7 +19,11 @@ server.post('/api/messages', connector.listen());
 // Bots Dialogs
 //=========================================================
 
-bot.dialog('/', function (session) {
-	session.send("I need brains");
-});
-
+bot.dialog('/', [ 
+	function (session) {
+		session.send("I have got no brains");
+	},
+	function(session, result){
+		session.send("Hello %s", result.response);
+	}]
+);
