@@ -1,5 +1,6 @@
 var restify = require('restify');
 var builder = require('botbuilder');
+var debug = require('debug')('app.js');
 
 var server = restify.createServer();
 server.listen(process.env.port || process.env.PORT || 3978, function () {
@@ -13,17 +14,13 @@ var connector = new builder.ChatConnector({
 });
 
 var bot = new builder.UniversalBot(connector);
-server.post('/api/messages', connector.listen());
+var intents = new builder.IntentDialog();
+server.post('/api/messages/', connector.listen());
 
 //=========================================================
 // Bots Dialogs
 //=========================================================
-
-bot.dialog('/', [ 
-	function (session) {
-		session.send("I have got no brains");
-	},
-	function(session, result){
-		session.send("Hello %s", result.response);
-	}]
-);
+bot.dialog('/', intents);
+intents.matches(/^change name/i, require('./dialogs/editName'));
+intents.onDefault(require('./dialogs/default'));
+bot.dialog('/profile', require('./dialogs/profile'));
